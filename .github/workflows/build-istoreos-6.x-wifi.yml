@@ -127,9 +127,9 @@ jobs:
         CONFIG_FILE_PATH: ${{ matrix.ARCHITECTURE }}/${{ env.CONFIG_FILE }}
       run: |
         # 确保当前目录可写
-        chmod -R +w ./
+        sudo chmod -R +w ./
         # 复制自定义机型配置文件到源码根目录
-        chmod -R 775 $GITHUB_WORKSPACE/configfiles/userpatches/zhoufuli/
+        sudo chmod -R 775 $GITHUB_WORKSPACE/configfiles/userpatches/zhoufuli/
         rsync -av --progress $GITHUB_WORKSPACE/configfiles/userpatches/zhoufuli/ openwrt/
         # cp --preserve=all -r $GITHUB_WORKSPACE/configfiles/userpatches/zhoufuli/* openwrt/
         [ -e files ] && mv files openwrt/files
