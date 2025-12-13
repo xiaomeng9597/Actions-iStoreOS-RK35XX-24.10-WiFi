@@ -260,34 +260,6 @@ PKG_KCONFIG:= \
 
 PKG_CONFIG_DEPENDS:=$(foreach c, $(PKG_KCONFIG),$(if $(CONFIG_MTK_$c),CONFIG_$(c)))
 
-# ===================== 全局屏蔽 mt_wifi 全目录编译报错 =====================
-# 1. 关闭「所有告警转为错误」（核心，告警不再导致编译失败）
-# EXTRA_CFLAGS += -Wno-error
-# 2. 屏蔽常见编译告警
-EXTRA_CFLAGS += \
-    -Wno-enum-conversion \          # 枚举类型转换告警
-    -Wno-implicit-fallthrough \     # case穿透未声明告警
-    -Wno-attribute-warning \        # 属性相关告警
-    -Wno-error=address \            # 地址相关错误告警
-    -Wno-error=stringop-overread \  # 字符串越界读告警
-    -Wno-error=stringop-overflow \  # 字符串越界写告警
-    -Wno-error=unused-variable \    # 未使用变量告警
-    -Wno-error=unused-function \    # 未使用函数告警
-    -Wno-error=implicit-function-declaration \  # 隐式函数声明告警
-    -Wno-error=format-security \    # 格式安全检查告警
-    -Wno-error=maybe-uninitialized \# 可能未初始化变量告警
-    -Wno-error=strict-prototypes \  # 严格函数原型告警
-    -Wno-error=missing-prototypes \ # 缺少函数原型告警
-    -Wno-error=incompatible-pointer-types # 指针类型不兼容告警
-# 3. 兼容处理编译器不识别的参数（避免无效参数干扰）
-ifeq ($(call cc-option,-Wno-write-overflow),y)
-EXTRA_CFLAGS += -Wno-write-overflow
-endif
-ifeq ($(call cc-option,-Wno-stringop-truncation),y)
-EXTRA_CFLAGS += -Wno-stringop-truncation
-endif
-# =======================================================================
-
 include $(INCLUDE_DIR)/package.mk
 
 
