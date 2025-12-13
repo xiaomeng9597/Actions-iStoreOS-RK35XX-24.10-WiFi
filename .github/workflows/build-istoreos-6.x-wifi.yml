@@ -140,7 +140,6 @@ jobs:
         cat "${GITHUB_WORKSPACE}/configfiles/config-6.6.local" >> target/linux/rockchip/armv8/config-6.6
         cat openwrt/$CONFIG_FILE
         cat target/linux/rockchip/armv8/config-6.6
-        
         chmod +x $DIY_P2_SH
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P2_SH
