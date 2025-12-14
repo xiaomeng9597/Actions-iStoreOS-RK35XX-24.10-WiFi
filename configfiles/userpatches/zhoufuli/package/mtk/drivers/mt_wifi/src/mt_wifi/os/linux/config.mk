@@ -169,7 +169,7 @@ CC := $(CROSS_COMPILE)gcc
 LD := $(CROSS_COMPILE)ld
 
 WFLAGS := -I$(RT28xx_DIR)/include -I$(RT28xx_EMBEDDED_DIR)/include
-WFLAGS += -Wall -Wstrict-prototypes -Wno-trigraphs -Wno-date-time
+WFLAGS += -Wall -Wstrict-prototypes -Wno-trigraphs -Werror -Wno-date-time
 WFLAGS += -DLINUX -DENHANCED_STAT_DISPLAY
 WFLAGS += -DCONFIG_ANDES_SUPPORT -DRTMP_EFUSE_SUPPORT
 WFLAGS += -DSYSTEM_LOG_SUPPORT -DRT28xx_MODE=$(RT28xx_MODE) -DCHIPSET=$(MODULE)
