@@ -48,7 +48,6 @@ extern UINT32 DebugSubCategory[DBG_LVL_MAX + 1][32];
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 6, 0)
 #include <linux/net/cfg80211.h>
-// 直接映射旧函数名到新接口，无需修改原有调用逻辑
 #define iwe_stream_add_event(info, ev, extra, extra_len, type)  cfg80211_iwe_stream_add_event(info, ev, extra, extra_len, type)
 #define iwe_stream_add_point(info, ev, extra, extra_len, p)    cfg80211_iwe_stream_add_point(info, ev, extra, extra_len, p)
 #define iwe_stream_add_value(info, ev, extra, extra_len, val, len)  cfg80211_iwe_stream_add_value(info, ev, extra, extra_len, val, len)
