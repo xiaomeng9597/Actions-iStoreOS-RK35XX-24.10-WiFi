@@ -364,7 +364,7 @@ VOID CFG80211DRV_P2pClientKeyAdd(VOID *pAdOrg, VOID *pData)
 						switch (wdev->AuthMode) {
 						case Ndis802_11AuthModeAutoSwitch:
 
-						[[fallthrough]];
+						/* fall through */
 						case Ndis802_11AuthModeShared:
 						case Ndis802_11AuthModeWPAPSK:
 						case Ndis802_11AuthModeWPA2PSK:

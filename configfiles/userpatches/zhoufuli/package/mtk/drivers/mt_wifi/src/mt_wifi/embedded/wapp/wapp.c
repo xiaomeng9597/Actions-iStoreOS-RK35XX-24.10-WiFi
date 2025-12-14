@@ -242,13 +242,13 @@ INT wapp_send_wdev_vht_cap_rsp(
 				switch	(wlan_operate_get_rx_stream(wdev)) {
 				case 4:
 					drv_vht_op.basic_mcs_set.mcs_ss4 = cap->mcs_nss.max_vht_mcs;
-					[[fallthrough]];
+					/* fall through */
 				case 3:
 					drv_vht_op.basic_mcs_set.mcs_ss3 = cap->mcs_nss.max_vht_mcs;
-					[[fallthrough]];
+					/* fall through */
 				case 2:
 					drv_vht_op.basic_mcs_set.mcs_ss2 = cap->mcs_nss.max_vht_mcs;
-					[[fallthrough]];
+					/* fall through */
 				case 1:
 					drv_vht_op.basic_mcs_set.mcs_ss1 = cap->mcs_nss.max_vht_mcs;
 					break;
@@ -262,13 +262,13 @@ INT wapp_send_wdev_vht_cap_rsp(
 					switch	(wlan_operate_get_rx_stream(wdev)) {
 					case 4:
 						drv_vht_op.basic_mcs_set.mcs_ss4 = VHT_MCS_CAP_8;
-						[[fallthrough]];
+						/* fall through */
 					case 3:
 						drv_vht_op.basic_mcs_set.mcs_ss3 = VHT_MCS_CAP_9;
-						[[fallthrough]];
+						/* fall through */
 					case 2:
 						drv_vht_op.basic_mcs_set.mcs_ss2 = VHT_MCS_CAP_8;
-						[[fallthrough]];
+						/* fall through */
 					case 1:
 						drv_vht_op.basic_mcs_set.mcs_ss1 = VHT_MCS_CAP_8;
 						break;
@@ -283,13 +283,13 @@ INT wapp_send_wdev_vht_cap_rsp(
 					switch	(wlan_operate_get_rx_stream(wdev)) {
 					case 4:
 						drv_vht_op.basic_mcs_set.mcs_ss4 = VHT_MCS_CAP_9;
-						[[fallthrough]];
+						/* fall through */
 					case 3:
 						drv_vht_op.basic_mcs_set.mcs_ss3 = VHT_MCS_CAP_8;
-						[[fallthrough]];
+						/* fall through */
 					case 2:
 						drv_vht_op.basic_mcs_set.mcs_ss2 = VHT_MCS_CAP_9;
-						[[fallthrough]];
+						/* fall through */
 					case 1:
 						drv_vht_op.basic_mcs_set.mcs_ss1 = VHT_MCS_CAP_9;
 						break;

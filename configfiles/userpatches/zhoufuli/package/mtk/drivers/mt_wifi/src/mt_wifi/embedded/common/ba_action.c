@@ -1761,7 +1761,7 @@ VOID peer_addba_rsp_action(RTMP_ADAPTER *pAd, MLME_QUEUE_ELEM *Elem)
 		break;
 	case MLME_REQUEST_DECLINED:
 		pAd->MacTab.Content[Elem->Wcid].BADeclineBitmap |= 1 << pFrame->BaParm.TID;
-		[[fallthrough]];
+		/* fall through */
 		/* don't break, need to delete the session, too */
 	default:
 		/* delete the ori ba session passively */

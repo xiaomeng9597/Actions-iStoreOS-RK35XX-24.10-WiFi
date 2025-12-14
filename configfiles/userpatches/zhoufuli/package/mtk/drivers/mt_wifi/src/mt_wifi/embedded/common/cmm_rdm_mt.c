@@ -936,7 +936,7 @@ INT zero_wait_dfs_switch_ch(
 	switch (*ch_stat) {
 	case DFS_INB_CH_INIT:
 		*ch_stat = DFS_OUTB_CH_CAC;
-		[[fallthrough]];
+		/* fall through */
 	case DFS_INB_DFS_RADAR_OUTB_CAC_DONE:
 		if (*ch_outband != 0) {
 			MTWF_DBG(pAd, DBG_CAT_CHN, CATCHN_DFS, DBG_LVL_NOTICE,
@@ -967,7 +967,7 @@ INT zero_wait_dfs_switch_ch(
 		}	else if (*ch_outband == 0 || wlan_config_get_vht_bw(wdev) == VHT_BW_80)
 			pAd->CommonCfg.DfsParameter.BW160DedicatedZWState = DFS_BW160_NOT_CH_36_64;
 #endif
-	[[fallthrough]];
+	/* fall through */
 	case DFS_INB_DFS_OUTB_CH_CAC:
 	case DFS_INB_DFS_OUTB_CH_CAC_DONE:
 		MTWF_DBG(pAd, DBG_CAT_CHN, CATCHN_DFS, DBG_LVL_NOTICE,

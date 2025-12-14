@@ -1082,7 +1082,7 @@ static BOOLEAN PeerAssocReqCmmSanity
 				txbf_set_oui(ENUM_BF_OUI_BROADCOM);
 			}
 #endif /* TXBF_SUPPORT */
-			[[fallthrough]];
+			/* fall through */
 		case IE_WPA2:
 #ifdef DOT11R_FT_SUPPORT
 #endif /* DOT11R_FT_SUPPORT */
@@ -1431,9 +1431,9 @@ static BOOLEAN PeerAssocReqCmmSanity
 #endif
 #ifdef DOT11_HE_AX
 			case IE_EXTENSION_ID_HE_CAP:
-			[[fallthrough]];
+			/* fall through */
 			case IE_EXTENSION_ID_HE_OP:
-			[[fallthrough]];
+			/* fall through */
 			case IE_EXTENSION_ID_HE_6G_CAP:
 				if (parse_he_assoc_req_ies((UINT8 *)eid_ptr, ie_lists) <= 0) {
 					MTWF_DBG(pAd, DBG_CAT_AP, DBG_SUBCAT_ALL, DBG_LVL_ERROR,
