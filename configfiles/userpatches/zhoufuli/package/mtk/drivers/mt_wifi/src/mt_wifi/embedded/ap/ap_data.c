@@ -1003,7 +1003,7 @@ static inline VOID ap_build_cache_802_11_header(
 	STA_TR_ENTRY *tr_entry;
 	HEADER_802_11 *pHeader80211;
 	MAC_TABLE_ENTRY *pMacEntry;
-
+	PUCHAR dest_hdr;
 	pHeader80211 = (PHEADER_802_11)pHeader;
 	pMacEntry = pTxBlk->pMacEntry;
 	tr_entry = pTxBlk->tr_entry;
@@ -1067,6 +1067,18 @@ static inline VOID ap_build_cache_802_11_header(
 			{	/* The addr3 of normal packet send from DS is Src Mac address. */
 				COPY_MAC_ADDR(pHeader80211->Addr3, pTxBlk->pSrcBufHeader + MAC_ADDR_LEN);
 			}
+	// 修复：广播/组播场景跨字段拷贝警告
+	if (IS_BROADCAST_MAC_ADDR(tr_entry->MacAddr) || IS_MULTICAST_MAC_ADDR(tr_entry->MacAddr))
+	{
+		dest_hdr = (PUCHAR)pHeader80211 + sizeof(HEADER_802_11) + 2;
+		memcpy(dest_hdr, &pTxBlk->wdev->ApCfg.Bssid, sizeof(MAC_ADDR));
+	}
+	// 修复：单播场景跨字段拷贝警告
+	else
+	{
+		dest_hdr = (PUCHAR)pHeader80211 + sizeof(HEADER_802_11) + 2;
+		memcpy(dest_hdr, tr_entry->MacAddr, sizeof(MAC_ADDR));
+	}
 }
 
 static inline VOID ap_build_802_11_header(RTMP_ADAPTER *pAd, TX_BLK *pTxBlk)
@@ -1076,6 +1088,7 @@ static inline VOID ap_build_802_11_header(RTMP_ADAPTER *pAd, TX_BLK *pTxBlk)
 	UINT8 tx_hw_hdr_len = cap->tx_hw_hdr_len;
 	struct wifi_dev *wdev = pTxBlk->wdev;
 	STA_TR_ENTRY *tr_entry = pTxBlk->tr_entry;
+	PUCHAR dest_hdr;
 	/*
 		MAKE A COMMON 802.11 HEADER
 	*/
@@ -1210,6 +1223,18 @@ static inline VOID ap_build_802_11_header(RTMP_ADAPTER *pAd, TX_BLK *pTxBlk)
 
 	pTxBlk->dot11_type = wifi_hdr->FC.Type;
 	pTxBlk->dot11_subtype = wifi_hdr->FC.SubType;
+	// 修复：广播/组播场景跨字段拷贝警告
+	if (tr_entry && (IS_BROADCAST_MAC_ADDR(tr_entry->MacAddr) || IS_MULTICAST_MAC_ADDR(tr_entry->MacAddr)))
+	{
+		dest_hdr = (PUCHAR)wifi_hdr + sizeof(HEADER_802_11) + 2;
+		memcpy(dest_hdr, &wdev->ApCfg.Bssid, sizeof(MAC_ADDR));
+	}
+	// 修复：单播场景跨字段拷贝警告
+	else if (tr_entry)
+	{
+		dest_hdr = (PUCHAR)wifi_hdr + sizeof(HEADER_802_11) + 2;
+		memcpy(dest_hdr, tr_entry->MacAddr, sizeof(MAC_ADDR));
+	}
 }
 
 BOOLEAN ap_fill_non_offload_tx_blk(RTMP_ADAPTER *pAd, struct wifi_dev *wdev, TX_BLK *pTxBlk)
