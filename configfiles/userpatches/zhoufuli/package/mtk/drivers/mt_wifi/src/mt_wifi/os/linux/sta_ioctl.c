@@ -56,6 +56,7 @@ extern UINT32 DebugSubCategory[DBG_LVL_MAX + 1][32];
 #define IWE_STREAM_ADD_VALUE(_A, _B, _C, _D, _E, _F)	iwe_stream_add_value(_B, _C, _D, _E, _F)
 #endif
 
+/*
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0)
 // 1. 取消旧宏定义，避免重复冲突
 #undef IWE_STREAM_ADD_EVENT
@@ -63,14 +64,15 @@ extern UINT32 DebugSubCategory[DBG_LVL_MAX + 1][32];
 #undef IWE_STREAM_ADD_VALUE
 
 // 2. 引入内核标准头文件（包含iwe_stream_xxx函数声明和iw_event结构体）
-/* #include <uapi/linux/wireless.h> */
-/* #include <net/iw_handler.h> */
+/* #include <uapi/linux/wireless.h> 
+/* #include <net/iw_handler.h> 
 
 // 3. 重新定义宏，适配内核6.6+参数要求（第一个参数转为info->skb）
 #define IWE_STREAM_ADD_EVENT(_A, _B, _C, _D, _E)	iwe_stream_add_event(((_A)->skb), (_B), (_C), (_D), (_E))
 #define IWE_STREAM_ADD_POINT(_A, _B, _C, _D, _E)	iwe_stream_add_point(((_A)->skb), (_B), (_C), (_D), (_E))
 #define IWE_STREAM_ADD_VALUE(_A, _B, _C, _D, _E, _F)	iwe_stream_add_value(((_A)->skb), (_B), (_C), (_D), (_E), (_F))
 #endif
+*/
 
 extern UCHAR    CipherWpa2Template[];
 
