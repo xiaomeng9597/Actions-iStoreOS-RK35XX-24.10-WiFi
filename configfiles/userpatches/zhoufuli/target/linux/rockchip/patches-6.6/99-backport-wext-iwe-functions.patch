@@ -6,9 +6,32 @@
  
 +#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0)
 +/* Backport legacy wext iwe functions for MTK wifi driver */
-+struct iw_event;
 +
-+/* 1.补全 iwe_stream_add_event */
++/* 补充依赖的结构体定义（避免类型未定义错误）- 移到函数前，先定义再使用 */
++struct iw_param {
++	__s32 value;
++	__u8 fixed;
++	__u8 disabled;
++};
++
++struct iw_point {
++	void __user *pointer;
++	__u16 length;
++	__u16 flags;
++};
++
++struct iw_event {
++	__u16 cmd;
++	__u16 len;
++	union {
++		__u32 value;
++		struct iw_param param;
++		struct iw_point point;
++		char data[0];
++	} u;
++};
++
++/* 1.补全 iwe_stream_add_event - 修正：iwe->u.data（对应union成员） */
 +static inline int iwe_stream_add_event(struct sk_buff *skb, u16 cmd,
 +				       const void *data, size_t len)
 +{
@@ -20,7 +43,7 @@
 +	iwe = (struct iw_event *)skb_put(skb, sizeof(*iwe) + len);
 +	iwe->cmd = cmd;
 +	iwe->len = len;
-+	memcpy(iwe->data, data, len);
++	memcpy(iwe->u.data, data, len); // 关键修正：原iwe->data改为iwe->u.data
 +	return 0;
 +}
 +
@@ -37,43 +60,19 @@
 +{
 +	return iwe_stream_add_event(skb, cmd, &value, sizeof(value));
 +}
-+
-+/* 补充依赖的结构体定义（避免类型未定义错误） */
-+struct iw_event {
-+	__u16 cmd;
-+	__u16 len;
-+	union {
-+		__u32 value;
-+		struct iw_param param;
-+		struct iw_point point;
-+		char data[0];
-+	} u;
-+};
-+
-+struct iw_point {
-+	void __user *pointer;
-+	__u16 length;
-+	__u16 flags;
-+};
-+
-+struct iw_param {
-+	__s32 value;
-+	__u8 fixed;
-+	__u8 disabled;
-+};
 +#endif
 --- a/net/wireless/wext-compat.c
 +++ b/net/wireless/wext-compat.c
-@@ -12,6 +12,10 @@
+@@ -12,6 +12,11 @@
  #include <linux/export.h>
  #include <linux/if_arp.h>
  #include <linux/wireless.h>
 +#include <linux/skbuff.h>
 +#include <linux/types.h>
 +
-+/* 导出函数，让驱动可调用 */
- EXPORT_SYMBOL_GPL(iwe_stream_add_event);
- EXPORT_SYMBOL_GPL(iwe_stream_add_event_u16);
- EXPORT_SYMBOL_GPL(iwe_stream_add_event_u32);
++/* 导出函数，让驱动可调用 - 所有新增导出都加+ */
++EXPORT_SYMBOL_GPL(iwe_stream_add_event);
++EXPORT_SYMBOL_GPL(iwe_stream_add_event_u16);
++EXPORT_SYMBOL_GPL(iwe_stream_add_event_u32);
 +EXPORT_SYMBOL_GPL(iwe_stream_add_point);
 +EXPORT_SYMBOL_GPL(iwe_stream_add_value);
