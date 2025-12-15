@@ -513,37 +513,9 @@
 #include <linux/version.h>
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0)
-/* 核心函数补全 */
 #include <uapi/linux/wireless.h>
-static inline int mt_iwe_stream_add_event(struct sk_buff *skb, u16 cmd, const void *data, size_t len)
-{
-    struct iw_event *iwe;
-    if (skb_tailroom(skb) < sizeof(*iwe) + len)
-        return -ENOBUFS;
-    iwe = (struct iw_event *)skb_put(skb, sizeof(*iwe) + len);
-    iwe->cmd = cmd;
-    iwe->len = len;
-    memcpy((void*)&iwe->u.data, data, len);
-    return 0;
-}
-
-static inline int mt_iwe_stream_add_point(struct sk_buff *skb, u16 cmd, const struct iw_point *p)
-{
-    return mt_iwe_stream_add_event(skb, cmd, p->pointer, p->length);
-}
-
-static inline int mt_iwe_stream_add_value(struct sk_buff *skb, u16 cmd, __u32 value)
-{
-    return mt_iwe_stream_add_event(skb, cmd, &value, sizeof(value));
-}
-
-/* 补充间接依赖的 mt_iwe_stream_add_event_u16 */
-static inline int mt_iwe_stream_add_event_u16(struct sk_buff *skb, u16 cmd, u16 value1, u16 value2)
-{
-    u16 values[2] = {value1, value2};
-    return mt_iwe_stream_add_event(skb, cmd, values, sizeof(values));
-}
-#endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0) */
+#include <net/iw_handler.h>
+#endif
 #endif /* LINUX */
 
 #endif	/* __RT_CONFIG_H__ */
