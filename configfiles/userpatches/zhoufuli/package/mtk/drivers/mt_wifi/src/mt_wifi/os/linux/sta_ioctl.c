@@ -47,13 +47,15 @@ extern UINT32 DebugSubCategory[DBG_LVL_MAX + 1][32];
 #define GROUP_KEY_NO                4
 
 #if (KERNEL_VERSION(2, 6, 27) <= LINUX_VERSION_CODE)
-#define IWE_STREAM_ADD_EVENT(_A, _B, _C, _D, _E)		iwe_stream_add_event(_A, _B, _C, _D, _E)
-#define IWE_STREAM_ADD_POINT(_A, _B, _C, _D, _E)		iwe_stream_add_point(_A, _B, _C, _D, _E)
-#define IWE_STREAM_ADD_VALUE(_A, _B, _C, _D, _E, _F)	iwe_stream_add_value(_A, _B, _C, _D, _E, _F)
+#define IWE_STREAM_ADD_EVENT(_A, _B, _C, _D, _E)        mt_iwe_stream_add_event(_A, _B, _C, _D)
+#define IWE_STREAM_ADD_POINT(_A, _B, _C, _D, _E)        mt_iwe_stream_add_point(_A, _B, _C)
+#define IWE_STREAM_ADD_VALUE(_A, _B, _C, _D, _E, _F)     mt_iwe_stream_add_value(_A, _B, _C)
+#define IWE_STREAM_ADD_EVENT_U16(_A, _B, _C, _D, _E)    mt_iwe_stream_add_event_u16(_A, _B, _C, _D)
 #else
-#define IWE_STREAM_ADD_EVENT(_A, _B, _C, _D, _E)		iwe_stream_add_event(_B, _C, _D, _E)
-#define IWE_STREAM_ADD_POINT(_A, _B, _C, _D, _E)		iwe_stream_add_point(_B, _C, _D, _E)
-#define IWE_STREAM_ADD_VALUE(_A, _B, _C, _D, _E, _F)	iwe_stream_add_value(_B, _C, _D, _E, _F)
+#define IWE_STREAM_ADD_EVENT(_A, _B, _C, _D, _E)        mt_iwe_stream_add_event(_B, _C, _D, _E)
+#define IWE_STREAM_ADD_POINT(_A, _B, _C, _D, _E)        mt_iwe_stream_add_point(_B, _C, _D)
+#define IWE_STREAM_ADD_VALUE(_A, _B, _C, _D, _E, _F)     mt_iwe_stream_add_value(_B, _C, _D)
+#define IWE_STREAM_ADD_EVENT_U16(_A, _B, _C, _D, _E)    mt_iwe_stream_add_event_u16(_B, _C, _D, _E)
 #endif
 
 extern UCHAR    CipherWpa2Template[];

@@ -515,7 +515,7 @@
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0)
 /* 核心函数补全 */
 #include <uapi/linux/wireless.h>
-static inline int iwe_stream_add_event(struct sk_buff *skb, u16 cmd, const void *data, size_t len)
+static inline int mt_iwe_stream_add_event(struct sk_buff *skb, u16 cmd, const void *data, size_t len)
 {
     struct iw_event *iwe;
     if (skb_tailroom(skb) < sizeof(*iwe) + len)
@@ -527,21 +527,21 @@ static inline int iwe_stream_add_event(struct sk_buff *skb, u16 cmd, const void 
     return 0;
 }
 
-static inline int iwe_stream_add_point(struct sk_buff *skb, u16 cmd, const struct iw_point *p)
+static inline int mt_iwe_stream_add_point(struct sk_buff *skb, u16 cmd, const struct iw_point *p)
 {
-    return iwe_stream_add_event(skb, cmd, p->pointer, p->length);
+    return mt_iwe_stream_add_event(skb, cmd, p->pointer, p->length);
 }
 
-static inline int iwe_stream_add_value(struct sk_buff *skb, u16 cmd, __u32 value)
+static inline int mt_iwe_stream_add_value(struct sk_buff *skb, u16 cmd, __u32 value)
 {
-    return iwe_stream_add_event(skb, cmd, &value, sizeof(value));
+    return mt_iwe_stream_add_event(skb, cmd, &value, sizeof(value));
 }
 
-/* 补充间接依赖的 iwe_stream_add_event_u16 */
-static inline int iwe_stream_add_event_u16(struct sk_buff *skb, u16 cmd, u16 value1, u16 value2)
+/* 补充间接依赖的 mt_iwe_stream_add_event_u16 */
+static inline int mt_iwe_stream_add_event_u16(struct sk_buff *skb, u16 cmd, u16 value1, u16 value2)
 {
     u16 values[2] = {value1, value2};
-    return iwe_stream_add_event(skb, cmd, values, sizeof(values));
+    return mt_iwe_stream_add_event(skb, cmd, values, sizeof(values));
 }
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0) */
 #endif /* LINUX */
