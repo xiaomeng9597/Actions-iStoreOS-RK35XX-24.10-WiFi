@@ -70,7 +70,7 @@
 +#include <linux/skbuff.h>
 +#include <linux/types.h>
 +
-+/* 导出函数，让驱动可调用 - 所有新增导出都加+ */
++/* 导出函数，让驱动可调用 */
 +EXPORT_SYMBOL_GPL(iwe_stream_add_event);
 +EXPORT_SYMBOL_GPL(iwe_stream_add_event_u16);
 +EXPORT_SYMBOL_GPL(iwe_stream_add_event_u32);
