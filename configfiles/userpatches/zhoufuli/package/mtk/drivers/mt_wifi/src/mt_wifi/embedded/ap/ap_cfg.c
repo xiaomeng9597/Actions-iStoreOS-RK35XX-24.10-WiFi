@@ -11795,8 +11795,6 @@ INT RTMPAPQueryInformation(
 			case 1:
 				drv_vht_op.basic_mcs_set.mcs_ss1 = cap->mcs_nss.max_vht_mcs;
 				break;
-			default:
-				break;
 			}
 			NdisMoveMemory(vht_cap.sup_tx_mcs,
 							&drv_vht_op.basic_mcs_set,

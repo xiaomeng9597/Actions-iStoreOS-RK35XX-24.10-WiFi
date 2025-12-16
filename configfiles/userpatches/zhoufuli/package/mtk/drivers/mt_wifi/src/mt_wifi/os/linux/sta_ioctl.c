@@ -25,7 +25,6 @@
     --------    ----------    ----------------------------------------------
     Rory Chen   01-03-2003    created
 	Rory Chen   02-14-2005    modify to support RT61
-	Adapted     2024          support Linux 6.6+ kernel (replace iwe_stream_* with cfg80211)
 */
 
 #define RTMP_MODULE_OS
@@ -47,73 +46,15 @@ extern UINT32 DebugSubCategory[DBG_LVL_MAX + 1][32];
 
 #define GROUP_KEY_NO                4
 
-// 内核 6.6+ 适配：移除旧 iwe_stream_* 宏定义，引入 cfg80211 新接口头文件
-#include <net/cfg80211.h>
-#include <linux/ieee80211.h>
-
-// 替换旧 IWE_STREAM_* 宏为 cfg80211 新接口实现
-#define IWE_STREAM_ADD_EVENT(_info, _curr, _end, _iwe, _len) \
-    cfg80211_event_convert_iwe((_info)->dev, (_iwe), (_len), (_curr), (_end))
-
-#define IWE_STREAM_ADD_POINT(_info, _curr, _end, _iwe, _data) \
-    cfg80211_event_convert_iwe_data((_info)->dev, (_iwe), (_data), (_curr), (_end))
-
-#define IWE_STREAM_ADD_VALUE(_info, _curr, _val_curr, _end, _iwe, _len) \
-    cfg80211_event_convert_iwe_value((_info)->dev, (_iwe), (_len), (_curr), (_val_curr), (_end))
-
-// cfg80211 事件转换辅助函数（适配 iw_event 到新接口）
-static inline char *cfg80211_event_convert_iwe(struct net_device *dev, struct iw_event *iwe, size_t len, char *curr, char *end)
-{
-    struct sk_buff *skb;
-    struct cfg80211_event *event;
-    size_t total_len = sizeof(*event) + len;
-
-    if (curr + total_len > end)
-        return curr;
-
-    skb = cfg80211_alloc_event_skb(dev, total_len, GFP_KERNEL);
-    if (!skb)
-        return curr;
-
-    event = (struct cfg80211_event *)skb_put(skb, sizeof(*event));
-    event->type = CFG80211_EVENT_WIRELESS_EXT;
-    event->length = len;
-
-    memcpy(skb_put(skb, len), iwe, len);
-    cfg80211_send_event_skb(dev, skb, 0);
-
-    return curr + total_len;
-}
-
-static inline char *cfg80211_event_convert_iwe_data(struct net_device *dev, struct iw_event *iwe, void *data, char *curr, char *end)
-{
-    struct sk_buff *skb;
-    struct cfg80211_event *event;
-    size_t data_len = iwe->u.data.length;
-    size_t total_len = sizeof(*event) + sizeof(*iwe) + data_len;
-
-    if (curr + total_len > end)
-        return curr;
-
-    skb = cfg80211_alloc_event_skb(dev, total_len, GFP_KERNEL);
-    if (!skb)
-        return curr;
-
-    event = (struct cfg80211_event *)skb_put(skb, sizeof(*event));
-    event->type = CFG80211_EVENT_WIRELESS_EXT;
-    event->length = sizeof(*iwe) + data_len;
-
-    memcpy(skb_put(skb, sizeof(*iwe)), iwe, sizeof(*iwe));
-    memcpy(skb_put(skb, data_len), data, data_len);
-    cfg80211_send_event_skb(dev, skb, 0);
-
-    return curr + total_len;
-}
-
-static inline char *cfg80211_event_convert_iwe_value(struct net_device *dev, struct iw_event *iwe, size_t len, char *curr, char *val_curr, char *end)
-{
-    return cfg80211_event_convert_iwe(dev, iwe, len, curr, end);
-}
+#if (KERNEL_VERSION(2, 6, 27) <= LINUX_VERSION_CODE)
+#define IWE_STREAM_ADD_EVENT(_A, _B, _C, _D, _E)		iwe_stream_add_event(_A, _B, _C, _D, _E)
+#define IWE_STREAM_ADD_POINT(_A, _B, _C, _D, _E)		iwe_stream_add_point(_A, _B, _C, _D, _E)
+#define IWE_STREAM_ADD_VALUE(_A, _B, _C, _D, _E, _F)	iwe_stream_add_value(_A, _B, _C, _D, _E, _F)
+#else
+#define IWE_STREAM_ADD_EVENT(_A, _B, _C, _D, _E)		iwe_stream_add_event(_B, _C, _D, _E)
+#define IWE_STREAM_ADD_POINT(_A, _B, _C, _D, _E)		iwe_stream_add_point(_B, _C, _D, _E)
+#define IWE_STREAM_ADD_VALUE(_A, _B, _C, _D, _E, _F)	iwe_stream_add_value(_B, _C, _D, _E, _F)
+#endif
 
 extern UCHAR    CipherWpa2Template[];
 
@@ -2912,11 +2853,7 @@ const struct iw_handler_def rt28xx_iw_handler_def = {
 	.num_private_args	= N(privtab),
 #endif /* #ifdef CONFIG_WEXT_PRIV */
 #if IW_HANDLER_VERSION >= 7
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0)
-/* Linux 6.6+ 暂时不设置，避免编译错误 */
-#else
 	.get_wireless_stats = rt28xx_get_wireless_stats,
-#endif
 #endif
 };
 

@@ -507,15 +507,4 @@
 #include <linux/socket.h>
 #endif
 
-#ifdef LINUX
-#include <linux/types.h>
-#include <linux/skbuff.h>
-#include <linux/version.h>
-
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(6,6,0)
-#include <uapi/linux/wireless.h>
-#include <net/iw_handler.h>
-#endif
-#endif /* LINUX */
-
 #endif	/* __RT_CONFIG_H__ */
