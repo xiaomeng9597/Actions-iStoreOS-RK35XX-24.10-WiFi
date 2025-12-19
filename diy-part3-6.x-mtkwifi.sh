@@ -61,7 +61,7 @@ chmod 755 package/base-files/files/etc/init.d/swconfig_install
 
 # 删除系统预留WiFi脚本，必须要删除
 rm -f package/base-files/files/sbin/wifi
-# 默认启用WiFi，系统开机后自动初始化无线功能，系统已加 “50-wifi-up” 文件，这地方注释掉
+# 默认启用WiFi，系统开机后自动初始化无线功能，系统已加 “50-wifi-up” 文件，这个地方注释掉
 # cp -f $GITHUB_WORKSPACE/configfiles/g68_mtkwifi package/base-files/files/etc/init.d/g68_mtkwifi
 # chmod 755 package/base-files/files/etc/init.d/g68_mtkwifi
 
