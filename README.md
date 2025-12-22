@@ -6,7 +6,7 @@
 
 请访问以下链接获取最新的代码、文档和更新：
 
-**https://github.com/xiaomeng9597/Actions-iStoreOS-RK35XX-24.10-NSY**
+**https://github.com/xiaomeng9597/iStoreOS-RK35XX-24.10-NSY**
 
 ## 迁移原因
 
